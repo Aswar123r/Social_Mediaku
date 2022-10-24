@@ -43,13 +43,31 @@ class CommentsController {
             return res.status(200).json({
                 message : "Your comment has been successfully deleted"
             })
-        } catch (error) {
-            next(error)
+        } catch (err) {
+            return res.status(500).json(`${err.message}. Please try again`)
         }
     }
 
-    static async Get (res, res, next) {
-
+    static async Get (req, res, next) {
+        const {id} = req.user
+        try {
+            const Comment = await Models.Comment.findAll({where : {UserId : id}, include : [
+                {
+                    model : Models.Photo,
+                    attributes: ['id', 'title', 'caption', 'poster_image_url'],
+                },
+                {
+                    model : Models.User,
+                    attributes: ['id', 'username', 'profile_image_url', 'phone_number'],
+                }
+            ]})
+            if(!Comment) return res.status(400).json("not found")
+            return res.status(200).json({
+                comments : Comment
+            })
+        } catch (err) {
+            return res.status(500).json(`${err.message}. Please try again`)
+        }
     }
 
 }

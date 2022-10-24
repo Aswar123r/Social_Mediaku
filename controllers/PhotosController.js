@@ -1,5 +1,6 @@
 
 const Models = require('../models/index')
+const {User} = require('../models/index')
 
 class PhotosController {
     static async Create (req, res, next) {
@@ -47,6 +48,31 @@ class PhotosController {
             return res.status(200).json({
                 message : 'Your photo has been successfully deleted'
             })
+        } catch (err) {
+            return res.status(500).json(`${err.message}. Please try again`)
+        }
+    }
+
+    static async Get (req, res, next) {
+        const {id} = req.user
+        try {
+            const Photo = await Models.Photo.findAll({where : {UserId : id}, include : [
+               {
+                 model : Models.Comment,
+                    attributes: ['comment'],
+                    as : 'Comments',
+                    include : {
+                        model :Models.User,
+                        attributes : ['username'],
+                        as : 'User'
+                    },
+               },
+               {
+                model : Models.User,
+                attributes: ['id', 'username', 'profile_image_url'],
+                as : 'User'
+               }
+            ]})
         } catch (err) {
             return res.status(500).json(`${err.message}. Please try again`)
         }

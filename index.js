@@ -17,7 +17,7 @@ app.use(express.json())
 app.use('/users', Users)
 app.use(authenticationMiddleware)
 app.use('/photos', Photos)
-//app.use('/comments', Comments)
+app.use('/comments', Comments)
 //app.use('/socialmedias', socialMedias)
 
 

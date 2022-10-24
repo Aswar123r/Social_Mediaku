@@ -47,6 +47,20 @@ class SocialMediaController {
         }
     }
 
+    static async Get(req, res, next) {
+        const {id} =req.user
+        try {
+            const socialMedia = await Models.SocialMedia.findAll({where : {UserId : id}, include : [
+                {
+                    model : Models.User,
+                    attributes: ['id', 'username', 'profile_image_url'],
+                }
+            ] })
+        } catch (err) {
+             return res.status(500).json(`${err.message}. Please try again`) 
+        }
+    }
+
 }
 
 module.exports = SocialMediaController
