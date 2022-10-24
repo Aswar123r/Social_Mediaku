@@ -5,8 +5,8 @@ const {sign} = require('../helpers/Jwt')
 
 class UsersController {
     static async Register (req, res, next) {
+        let {full_name, email, username, password, profile_image_url, age, phone_number} = req.body
         try {
-            let {full_name, email, username, password, profile_image_url, age, phone_number} = req.body
             password = hash(password)
             const validateEmail = await Models.User.findOne({where : {email : email}})
             if(validateEmail) return res.status(400).json("Email Already Registered!")
@@ -69,7 +69,6 @@ class UsersController {
         const {id} = req.user
         try {
             const User = await Models.User.destroy({where : {id : id}})
-            console.log(User)
             return res.status(200).json({
                 message : "Your account has been successfully deleted"
             })

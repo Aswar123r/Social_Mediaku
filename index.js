@@ -8,12 +8,15 @@ const Photos = require('./routes/PhotosRouter')
 const Comments = require('./routes/CommentsRouter')
 const socialMedias = require('./routes/SocialMediaRouter')
 
+// import middleware
+const authenticationMiddleware = require('./middlewares/AuthenticationMiddleware')
+
 const app = express()
 app.use(express.json())
 
 app.use('/users', Users)
-
-//app.use('/photos', Photos)
+app.use(authenticationMiddleware)
+app.use('/photos', Photos)
 //app.use('/comments', Comments)
 //app.use('/socialmedias', socialMedias)
 
